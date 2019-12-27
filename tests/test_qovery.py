@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from client.qovery import Qovery
+from qovery_client.qovery import Qovery
 
 
 class MyQoveryTest(unittest.TestCase):

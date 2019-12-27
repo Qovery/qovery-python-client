@@ -3,7 +3,7 @@ import base64
 import json
 import os
 
-from client.database_configuration import DatabaseConfiguration
+from qovery_client.database_configuration import DatabaseConfiguration
 
 
 class Qovery(object):
