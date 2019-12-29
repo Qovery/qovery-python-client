@@ -8,16 +8,14 @@ from qovery_client.database_configuration import DatabaseConfiguration
 
 class Qovery(object):
 
-    def __init__(self, configuration_file=None):
+    def __init__(self, configuration_file_path=None):
         self._ENV_JSON_B64 = "QOVERY_JSON_B64"
         self._ENV_IS_PRODUCTION = "QOVERY_IS_PRODUCTION"
         self._ENV_BRANCH_NAME = "QOVERY_BRANCH_NAME"
 
-        self._configuration_file = configuration_file
-
         self.configuration = self._get_configuration_from_environment_variable(self._ENV_JSON_B64)
         if not self.configuration:
-            self.configuration = self._get_configuration_from_file(configuration_file)
+            self.configuration = self._get_configuration_from_file(configuration_file_path)
 
     @staticmethod
     def _get_configuration_from_environment_variable(environment_variable):
@@ -32,15 +30,14 @@ class Qovery(object):
         return json.loads(json_string)
 
     @staticmethod
-    def _get_configuration_from_file(file):
-        if not file:
+    def _get_configuration_from_file(file_path):
+        if not file_path:
             return None
 
         try:
-            json_string = file.read()
-            file.close()
-
-            return json.loads(json_string)
+            with open(file_path, mode='r') as f:
+                json_string = f.read()
+                return json.loads(json_string)
         except OSError:
             pass
 

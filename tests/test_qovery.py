@@ -12,7 +12,7 @@ class MyQoveryTest(unittest.TestCase):
         self.b64_file = f.read()
         f.close()
 
-        self.local_configuration_file = open("local_configuration.json", "r")
+        self.local_configuration_file_path = "local_configuration.json"
 
         os.environ["QOVERY_JSON_B64"] = self.b64_file
         os.environ["QOVERY_BRANCH_NAME"] = "master"
@@ -28,10 +28,17 @@ class MyQoveryTest(unittest.TestCase):
 
     def test_configuration(self):
         os.environ["QOVERY_JSON_B64"] = ""
-        q = Qovery(configuration_file=self.local_configuration_file)
+        q = Qovery(configuration_file_path=self.local_configuration_file_path)
         os.environ["QOVERY_JSON_B64"] = self.b64_file
 
         self.assertIsNotNone(q.configuration)
+
+    def test_configuration_with_bad_file_path(self):
+        os.environ["QOVERY_JSON_B64"] = ""
+        q = Qovery(configuration_file_path='it_does_not_exists')
+        os.environ["QOVERY_JSON_B64"] = self.b64_file
+
+        self.assertIsNone(q.configuration)
 
     def test_list_databases(self):
         self.assertEqual(len(self.qovery.databases), 1)
